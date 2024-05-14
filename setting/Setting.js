@@ -1,180 +1,191 @@
-//Setting.Js
-import { useState } from "react";
-import PropTypes from "prop-types"; // Import PropTypes
+//setting
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import SettingsComponent from "./SettingsComponent";
 
-const Setting = () => {
-  const [formData, setFormData] = useState({}); 
-  const [activeStep, setActiveStep] = useState(0);
+const Setting = ({Settings}) => {
+console.log(({Settings}))
+  const [formData, setFormData] = useState({});
 
-  const handleNext = () => {
-    setActiveStep(prevStep => prevStep + 1);
+  const handleNext = () => {};  
+  const handleBack = () => {};
+
+  const settingsObject = {
+    sections: [
+      { 
+        title: "Personal Information",
+        fields: [
+        
+          {
+            name: "Full Name",
+            type: "text",
+            defaultValue: "",
+            uiComponent: "textbox",
+            targetKey: "user.data.name",
+            description: "Enter your full name"
+          },
+          {
+            name: "Age",
+            type: "number",
+            defaultValue: "",
+            uiComponent: "number",
+            targetKey: "user.data.age",
+            description: "Enter your age"
+          },
+          {
+            name: "Gender",
+            type: "select",
+            defaultValue: "",
+            uiComponent: "select",
+            targetKey: "user.data.gender",
+            options: ["Male", "Female", "Other"]
+          }
+        ]
+      },
+      {
+        title: "Policy",
+        fields: [
+          {
+            name: "No Noon Logs",
+            type: "boolean",
+            defaultValue: false,
+            uiComponent: "toggle",
+            targetKey: "user.policy.noNoonLogs",
+            description: "If employees aren't necessarily needed to use biometrics at noon time"
+          },
+          {
+            name: "No Absent on Special Holiday",
+            type: "boolean",
+            defaultValue: false,
+            uiComponent: "toggle",
+            targetKey: "user.policy.SpecialHoliday",
+            description: "No absent will be recorded when employee is not present on special holiday",
+          },
+          {
+            name: "Break (minutes)",
+            type: "number",
+            defaultValue: "0",
+            uiComponent: "number",
+            targetKey: "user.policy.Break",
+            description: "Given break time between am and pm",
+          },
+          {
+            name: "Daily Regular Hours(hours)",
+            type: "number",
+            defaultValue: "0",
+            uiComponent: "number",
+            targetKey: "user.policy.reghours",
+            description: "Regular hours to be rendered by employee each day",
+          },
+          {
+            name: "Late Grace Period (minutes)",
+            type: "text",
+            defaultValue: "0",
+            uiComponent: "text",
+            targetKey: "user.policy.late.late",
+            description: "Given grace period before late or tardiness will be applied",
+          },
+          {
+            name: "Allow offsetting",
+            type: "boolean",
+            defaultValue: false,
+            uiComponent: "toggle",
+            targetKey: "user.policy.late.offset",
+            description: "If minutes of late can be offset at the end of the schedule",
+          },
+          {
+            name: "Late offsetting (minutes)",
+            type: "number",
+            defaultValue: "30",
+            uiComponent: "number",
+            targetKey: "user.policy.late.lateoffsets",
+            description: "Given minute of late that can be offset",
+          },
+          {
+            name: "Minimum Overtime (minutes)",
+            type: "number",
+            defaultValue: "0",
+            uiComponent: "number",
+            targetKey: "user.policy.late.minovertime",
+            description: "Minimum minutes to meet before overtime will count",
+          },
+          {
+            name: "Allowed Excess of Overtime (minutes)",
+            type: "number",
+            defaultValue: "0",
+            uiComponent: "number",
+            targetKey: "user.policy.late.maxovertime",
+            description: "The remainder of total overtime in minutes divides by this will be removed",
+          },
+        ]
+      },
+      {
+        title: "Deduction",
+        fields: [
+          {
+            name: "User Deduction",
+            type: "json",
+            defaultValue: [],
+            uiComponent: "table",
+            targetKey: "user.deductions",
+            columns: [
+              {
+                field: "code",
+                headerName: "Deduction Code",
+                width: 150
+              },
+              {
+                field: "desc",
+                headerName: "Description",
+                width: 300
+              }
+            ],
+            description: ""
+          }
+        ]
+      }
+      
+    ]
   };
-
-  const handleBack = () => {
-    setActiveStep(prevStep => prevStep - 1);
-  };
-
-  const steps = [
-    {
-      title: "Personal Information",
-      settings: [
-        {
-          type: "text",
-          defaultValue: "",
-          ui_component: "textbox",
-          targetKey: "user.step1.name",
-          caption: "Full Name",
-          subCaption: "Enter your full name"
-        },
-        {
-          type: "number",
-          defaultValue: "",
-          ui_component: "number",
-          targetKey: "user.step1.age",
-          caption: "Age",
-          subCaption: "Enter your age"
-        },  
-        {
-          type: "select",
-          defaultValue: "",
-          ui_component: "select",
-          targetKey: "user.step1.gender",
-          options: ["Male", "Female", "Other"],
-          caption: "Gender"
-         
-        }
-      ]
-    },
-    {
-      title: "Subscription",
-      settings: [
-        {
-          type: "select",
-          defaultValue: "",
-          ui_component: "select",
-          targetKey: "user.step2.mode",
-          caption: "Mode",
-          options: ["Basic", "Pro", "Enterprise"],
-        },
-        {
-          type: "boolean",
-          defaultValue: false,
-          ui_component: "toggle",
-          targetKey: "user.step2.allow13thMonthPayroll",
-          caption: "Enable 13th Month Payroll",
-        },
-        {
-          type: "boolean",
-          defaultValue: false,
-          ui_component: "toggle",
-          targetKey: "user.step2.setDateToPreviousPayroll",
-          caption: "Set Date to Previous Payroll",
-        }
-      ]
-    },
-    {
-      title: "Policy",
-      settings: [
-        {
-          type: "boolean",
-          defaultValue: false,
-          ui_component: "toggle",
-          targetKey: "user.policy.noNoonLogs",
-          caption: "No Noon Logs",
-          subCaption: "If employees aren't necessarily needed to use biometrics at noon time",
-        },
-        {
-          type: "boolean",
-          defaultValue: false,
-          ui_component: "toggle",
-          targetKey: "user.policy.SpecialHoliday",
-          caption: "No Absent on Special Holiday",
-          subCaption: "No absent will be recorded when employee is not present on special holiday",
-        },
-        {
-          type: "number",
-          defaultValue: "0",
-          ui_component: "number",
-          targetKey: "user.policy.Break",
-          caption: "Break (minutes)",
-          subCaption: "Given break time between am and pm",
-        },
-        {
-          type: "number",
-          defaultValue: "0",
-          ui_component: "number",
-          targetKey: "user.policy.reghours",
-          caption: "Daily Regular Hours(hours)",
-          subCaption: "Regular hours to be rendered by employee each day",
-        },
-        {
-          type: "text",
-          defaultValue: "0",
-          ui_component: "text",
-          targetKey: "user.policy.late.late",
-          caption: "Late Grace Period (minutes)",
-          subCaption: "Given grace period before late or tardiness will be applied",
-        },
-        {
-          type: "boolean",
-          defaultValue: false,
-          ui_component: "toggle",
-          targetKey: "user.policy.late.offset",
-          caption: "Allow offsetting",
-          subCaption: "If minutes of late can be offset at the end of the schedule",
-        },
-        {
-          type: "number",
-          defaultValue: "30",
-          ui_component: "number",
-          targetKey: "user.policy.late.lateoffsets",
-          caption: "Late offsetting (minutes)",
-          subCaption: "Given minute of late that can be offset",
-        },
-        {
-          type: "number",
-          defaultValue: "0",
-          ui_component: "number",
-          targetKey: "user.policy.late.minovertime",
-          caption: "Minimum Overtime (minutes)",
-          subCaption: "Minimum minutes to meet before overtime will count",
-        },
-        {
-          type: "number",
-          defaultValue: "0",
-          ui_component: "tnumber",
-          targetKey: "user.policy.late.maxovertime",
-          caption: "Allowed Excess of Overtime (minutes)",
-          subCaption: "The remainder of total overtime in minutes divides by this will be removed",
-        },
-      ]
-    }
-   
-  ];
+  
+  const data = settingsObject.sections.map(section => ({
+    title: section.title,
+    settings: section.fields.map(field => ({
+      type: field.type,
+      defaultValue: field.defaultValue,
+      uiComponent: field.uiComponent,
+      targetKey: field.targetKey,
+      caption: field.name,
+      subCaption: field.description,
+      options: field?.options,
+      columns :field?.columns
+    }))
+  }));
+  
 
   return (
-    <SettingsComponent 
-      settings={steps} 
-      dataObj={formData} 
-      onChangeSettings={setFormData} 
-      activeStep={activeStep}
-      onNext={handleNext}
-      onBack={handleBack}
-    />
+    <>
+      <SettingsComponent
+        settings={data}
+        dataObj={formData}
+        onChangeSettings={setFormData}
+        onNext={handleNext}
+        onBack={handleBack}
+      />
+    </>
   );
 };
 
-// Prop types validation
 Setting.propTypes = {
-  steps: PropTypes.arrayOf(
+  
+  Settings: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
       settings: PropTypes.arrayOf(
         PropTypes.shape({
           type: PropTypes.oneOf(["text", "number", "select", "boolean"]).isRequired,
           defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]).isRequired,
-          ui_component: PropTypes.string.isRequired,
+          uiComponent: PropTypes.string.isRequired,
           targetKey: PropTypes.string.isRequired,
           caption: PropTypes.string.isRequired,
           subCaption: PropTypes.string,
